@@ -15,11 +15,11 @@ Check it out here: [https://trip-buddy-fgpq.onrender.com/](https://trip-buddy-fg
 
 Here're some of the project's best features:
 
-✔️️   <b>User Authentication</b> – Secure login & signup using Firebase Auth.
-✔️   <b>Personalized Recommendations</b> – Get place suggestions based on user preferences.
-✔️   <b>Google Maps API Integration</b> – Fetch real-time data (places reviews ratings).
-✔️   <b>Modern UI with React & TailwindCSS</b> – Clean & responsive design.
-✔️   <b>Deployed on Render</b> – Frontend (Static Site)</b> & Backend (Web Service).
+✔️️   <b>User Authentication</b> – Secure login & signup using Firebase Auth. <br>
+✔️   <b>Personalized Recommendations</b> – Get place suggestions based on user preferences. <br>
+✔️   <b>Google Maps API Integration</b> – Fetch real-time data (places reviews ratings). <br>
+✔️   <b>Modern UI with React & TailwindCSS</b> – Clean & responsive design. <br>
+✔️   <b>Deployed on Render</b> – Frontend (Static Site)</b> & Backend (Web Service). <br>
 
 <h2>🖇️ Pre-requesities </h2>
 
