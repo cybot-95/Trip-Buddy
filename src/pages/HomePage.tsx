@@ -5,7 +5,15 @@ import { GoogleMap, useLoadScript, MarkerF } from '@react-google-maps/api';
 import { PlaceCarousel } from '../components/PlaceCarousel';
 import { motion } from 'framer-motion';
 
-const placeTypes = ["tourist_attraction", "amusement_park", "museum", "zoo", "aquarium", "art_gallery", "park"];
+const placeTypes = [
+  { label: "Tourist Attraction", value: "tourist_attraction" },
+  { label: "Amusement Park", value: "amusement_park" },
+  { label: "Museum", value: "museum" },
+  { label: "Zoo", value: "zoo" },
+  { label: "Aquarium", value: "aquarium" },
+  { label: "Art Gallery", value: "art_gallery" },
+  { label: "Park", value: "park" }
+];
 
 const mapContainerStyle = {
   width: '100%',
@@ -16,8 +24,8 @@ const mapContainerStyle = {
 export const HomePage = () => {
   const [center, setCenter] = useState({ lat: 12.971599, lng: 77.594566 });
   const [zoom, setZoom] = useState(11);
-  const [selectedType, setSelectedType] = useState(placeTypes[0]);
-  const [places, setPlaces] = useState([]);
+  const [selectedType, setSelectedType] = useState(placeTypes[0].value);
+  const [places, setPlaces] = useState<any[]>([]);
   const [uid, setUid] = useState(localStorage.getItem('uid') || '');
   const { ref: scrollRef, inView } = useInView();
 
@@ -30,7 +38,7 @@ export const HomePage = () => {
     try {
       if (!uid) return; // Ensure user is logged in
 
-      const url = type 
+      const url = type
         ? `https://trip-buddy-server.onrender.com/recommend?uid=${uid}&type=${type}`
         : `https://trip-buddy-server.onrender.com/recommend?uid=${uid}`;
 
@@ -69,50 +77,52 @@ export const HomePage = () => {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <div 
-        className="h-screen relative bg-cover bg-center"
+      {/* New Hero Section */}
+      <div
+        className="h-screen relative bg-cover bg-center flex items-center justify-center"
         style={{
           backgroundImage: "url('https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fHx8fA%3D%3D&auto=format&fit=crop&w=2021&q=80')"
         }}
       >
         <div className="absolute inset-0 bg-black/40" />
-        <div className="absolute bottom-20 left-10 text-white max-w-xl">
-          <motion.h1 
-            className="text-5xl font-bold mb-4"
+        <div className="relative z-10 text-white text-center px-4">
+          <motion.h1
+            className="text-4xl md:text-5xl font-bold mb-6"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            Discover Your Next Adventure
+            Let's go somewhere new,
+            <br />
+            where adventure awaits
           </motion.h1>
-          <motion.p 
-            className="text-xl"
+          <motion.p
+            className="text-xl md:text-2xl mb-8"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            Explore handpicked destinations tailored just for you
+            Finding the hidden gems of Bengaluru
           </motion.p>
+          <motion.button
+            onClick={scrollToMap}
+            className="bg-white text-gray-900 px-8 py-3 rounded-full flex items-center space-x-2 hover:bg-gray-100 transition-colors mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+          >
+            <span>Explore</span>
+            <ChevronRight className="h-5 w-5" />
+          </motion.button>
         </div>
-        <motion.button
-          onClick={scrollToMap}
-          className="absolute bottom-20 right-10 bg-white/90 backdrop-blur-sm text-gray-900 px-6 py-3 rounded-full flex items-center space-x-2 hover:bg-white transition-colors"
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-        >
-          <span>Go</span>
-          <ChevronRight className="h-5 w-5" />
-        </motion.button>
       </div>
 
       {/* Map Section */}
       <div id="map-section" ref={scrollRef} className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex space-x-8">
-            <div className="w-3/4">
-              <div className="rounded-xl overflow-hidden shadow-lg">
+        <div className="max-w mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex space-x-4">
+            <div className="w-1/2">
+              <div className="rounded-3xl overflow-hidden shadow-lg border-2 border-sky-950">
                 <GoogleMap
                   mapContainerStyle={mapContainerStyle}
                   center={center}
@@ -142,38 +152,41 @@ export const HomePage = () => {
                 </GoogleMap>
               </div>
             </div>
-            
-            <div className="w-1/4">
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <h3 className="text-lg font-semibold mb-4">Filter Places</h3>
-                <select
-                  value={selectedType}
-                  onChange={(e) => setSelectedType(e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  {placeTypes.map((type) => (
-                    <option key={type} value={type}>
-                      {type}
-                    </option>
-                  ))}
-                </select>
-                <button 
-                  onClick={handleSearch}
-                  className="mt-4 w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2"
-                >
-                  <Search className="h-4 w-4" />
-                  <span>Search</span>
-                </button>
+
+            <div className="w-1/2">
+              <div className="bg-cyan-800/10 rounded-3xl shadow-lg p-6 border-2 border-sky-950">
+                <h3 className="text-lg font-semibold mb-4">Something on mind ?</h3>
+
+                <div className="flex items-center gap-2">
+                  {/* Dropdown Select */}
+                  <select
+                    value={selectedType}
+                    onChange={(e) => setSelectedType(e.target.value)}
+                    className="flex-1 p-2 border border-gray-300 rounded-full focus:outline-none focus:ring-1 focus:ring-sky-950"
+                  >
+                    {placeTypes.map((type) => (
+                      <option key={type.value} value={type.value}>
+                        {type.label}
+                      </option>
+                    ))}
+                  </select>
+
+                  {/* Compact Search Button */}
+                  <button
+                    onClick={handleSearch}
+                    className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors"
+                    aria-label="Search"
+                  >
+                    <Search className="h-5 w-5" />
+                  </button>
+                </div>
+
+                {/* Recommendations Section */}
+                <div className="mt-8">
+                  <PlaceCarousel places={places} />
+                </div>
               </div>
             </div>
-          </div>
-
-          {/* Recommendations Section */}
-          <div className="mt-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
-              Recommended Places
-            </h2>
-            <PlaceCarousel places={places} />
           </div>
         </div>
       </div>
